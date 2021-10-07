@@ -1,0 +1,11 @@
+torch
+numpy
+pandas
+scikit-learn
+tqdm
+tensorflow
+keras
+tensorboard
+matplotlib
+seaborn
+feather-format
