@@ -4,7 +4,7 @@
 ```
 pip install -r requirements.txt
 ```
-Create a data folder as follows:
+Create a data folder and a logs folder as follows:
 ```
 │
 ├ configs
@@ -14,4 +14,10 @@ Create a data folder as follows:
         ├ test.csv
     ├ output
         ├ sample_submission.csv
+├ logs
+    ├ fold0
+    ├ fold1
+    ├ fold2
+    ├ fold3
+    ├ fold4
 ```

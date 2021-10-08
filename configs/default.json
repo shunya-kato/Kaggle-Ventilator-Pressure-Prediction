@@ -1,5 +1,10 @@
 {
     "features": [
         "area"
-    ]
+    ],
+    "input_size": 80,
+    "batch_size": 512,
+    "seed": 42,
+    "epochs": 3,
+    "n_splits": 5
 }
