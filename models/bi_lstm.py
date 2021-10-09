@@ -5,12 +5,13 @@ from tensorflow.keras.callbacks import *
 
 
 def create_model(input_size, num_feats):
-    gpus = tf.config.experimental.list_logical_devices("GPU")
+    #gpus = tf.config.experimental.list_logical_devices("GPU")
 
-    if len(gpus) > 1:
-        strategy = tf.distribute.MirroredStrategy([gpu.name for gpu in gpus])
-    else:
-        strategy = tf.distribute.get_strategy()
+    #if len(gpus) > 1:
+    #    strategy = tf.distribute.MirroredStrategy([gpu.name for gpu in gpus])
+    #else:
+    #    strategy = tf.distribute.get_strategy()
+    strategy = tf.distribute.get_strategy()
     
     with strategy.scope():
         model = Sequential([

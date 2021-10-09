@@ -36,6 +36,9 @@ def main():
     train_df = pd.concat([train_df, train_feats], axis=1)
     test_df = pd.concat([test_df, test_feats], axis=1)
 
+    train_df = pd.get_dummies(train_df)
+    test_df = pd.get_dummies(test_df)
+
     y = train_df['pressure'].to_numpy().reshape(-1, input_size)
 
     train_df.drop(['pressure', 'id', 'breath_id'], axis=1, inplace=True)

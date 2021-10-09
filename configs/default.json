@@ -1,6 +1,9 @@
 {
     "features": [
-        "area"
+        "area", "u_in_cumsum", "u_in_lag1", "u_in_lag2", "u_in_lag3", "u_in_lag4", "u_out_lag1", "u_out_lag2", "u_out_lag3", "u_out_lag4",
+        "u_in_lag_back1", "u_in_lag_back2", "u_in_lag_back3", "u_in_lag_back4", "u_out_lag_back1", "u_out_lag_back2", "u_out_lag_back3", "u_out_lag_back4",
+        "breath_id__u_in__max", "breath_id__u_out__max", "u_in_diff1", "u_in_diff2", "u_in_diff3", "u_in_diff4", "u_out_diff1", "u_out_diff2", "u_out_diff3", "u_out_diff4",
+        "breath_id__u_in__diffmax", "breath_id__u_in__diffmean", "breath_id__u_out__diffmax", "breath_id__u_out__diffmean", "cross", "cross2", "r__c"
     ],
     "input_size": 80,
     "batch_size": 512,
