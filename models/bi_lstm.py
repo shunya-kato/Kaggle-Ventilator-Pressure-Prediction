@@ -16,12 +16,12 @@ def create_model(input_size, num_feats):
     with strategy.scope():
         model = Sequential([
             Input(shape=(input_size, num_feats)),
-            Bidirectional(LSTM(700, return_sequences=True)),
+            Bidirectional(LSTM(1024, return_sequences=True)),
             Bidirectional(LSTM(512, return_sequences=True)),
             Bidirectional(LSTM(256, return_sequences=True)),
             Bidirectional(LSTM(128, return_sequences=True)),
             Dense(256, activation='selu'),
-            #Dropout(0.1)
+            #Dropout(0.1),
             Dense(1)
         ])
 

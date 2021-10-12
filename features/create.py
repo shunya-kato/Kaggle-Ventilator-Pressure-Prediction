@@ -3,18 +3,30 @@ import pandas as pd
 from base import Feature, get_arguments, generate_features
 from pathlib import Path
 import sys, os
+sys.path.append(os.path.abspath(".."))
 sys.path.append(os.path.abspath("."))
 from scripts.load_features import load_features
 import json
 
-class R__C(Feature):
+class time_end(Feature):
     def create_features(self):
-        train['R'] = train['R'].astype(str)
-        train['C'] = train['C'].astype(str)
-        test['R'] = test['R'].astype(str)
-        test['C'] = test['C'].astype(str)
-        self.train['R__C'] = train["R"].astype(str) + '__' + train["C"].astype(str)
-        self.test['R__C'] = test["R"].astype(str) + '__' + test["C"].astype(str)
+        # All entries are first point of each breath_id
+        first_df = train.loc[0::80,:]
+        # All entries are first point of each breath_id
+        last_df = train.loc[79::80,:]
+    
+        time_end_dict = dict(zip(last_df['breath_id'], last_df['time_step']))     
+        self.train['time_end'] = train['breath_id'].map(time_end_dict)
+
+        # All entries are first point of each breath_id
+        first_df = test.loc[0::80,:]
+        # All entries are first point of each breath_id
+        last_df = test.loc[79::80,:]
+        
+        # The Main mode DataFrame and flag
+        time_end_dict = dict(zip(last_df['breath_id'], last_df['time_step']))     
+        self.test['time_end'] = test['breath_id'].map(time_end_dict)
+        
 
 if __name__ == '__main__':
     args = get_arguments()

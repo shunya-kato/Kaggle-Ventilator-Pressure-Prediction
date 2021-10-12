@@ -27,6 +27,9 @@ def main():
     input_size = config['input_size']
     epochs = config['epochs']
     n_splits = config['n_splits']
+    lr = config['lr']
+    decay_late = config['decay_late']
+    decay_epochs = config['decay_epochs']
 
     train_df = pd.read_csv(path / 'data' / 'input' / 'train.csv')
     test_df = pd.read_csv(path / 'data' / 'input' / 'test.csv')
@@ -63,7 +66,7 @@ def main():
         X_train, X_valid = train[train_idx], train[test_idx]
         y_train, y_valid = y[train_idx], y[test_idx]
 
-        scheduler = tf.keras.optimizers.schedules.ExponentialDecay(1e-3, 200*((len(train)*0.8)/batch_size), 1e-5)
+        scheduler = tf.keras.optimizers.schedules.ExponentialDecay(lr, decay_epochs*((len(train)*0.8)/batch_size), decay_late)
         es = EarlyStopping(monitor='val_loss',mode='min', patience=35, verbose=1,restore_best_weights=True)
         tb = callbacks.TensorBoard(log_dir=path/'logs'/f'fold{fold}', histogram_freq=1)
 
