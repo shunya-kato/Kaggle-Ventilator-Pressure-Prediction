@@ -21,3 +21,7 @@ Create a data folder and a logs folder as follows:
     ├ fold3
     ├ fold4
 ```
+
+## features
+- https://www.kaggle.com/hamzaghanmi/tensorflow-bi-lstm-with-tpu
+- https://www.kaggle.com/marutama/eda-about-lstm-feature-importance
