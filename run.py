@@ -14,7 +14,7 @@ import tensorflow as tf
 from tensorflow.keras.layers import *
 from tensorflow.keras import *
 from tensorflow.keras.callbacks import *
-from models.bi_lstm import create_model
+from models.dnn_model import create_model
 
 def main():
     print("GPUs Available: ", tf.test.is_gpu_available())
@@ -27,9 +27,11 @@ def main():
     input_size = config['input_size']
     epochs = config['epochs']
     n_splits = config['n_splits']
-    lr = config['lr']
+    #lr = config['lr']
     decay_late = config['decay_late']
     decay_epochs = config['decay_epochs']
+
+    tf.random.set_seed(42)
 
     train_df = pd.read_csv(path / 'data' / 'input' / 'train.csv')
     test_df = pd.read_csv(path / 'data' / 'input' / 'test.csv')
@@ -39,15 +41,39 @@ def main():
     train_df = pd.concat([train_df, train_feats], axis=1)
     test_df = pd.concat([test_df, test_feats], axis=1)
 
+    train_df['R'] = train_df['R'].astype(str)
+    train_df['C'] = train_df['C'].astype(str)
+    test_df['R'] = test_df['R'].astype(str)
+    test_df['C'] = test_df['C'].astype(str)
+
+    train_df[["15_in_sum","15_in_min","15_in_max","15_in_mean"]] = (train_df\
+                                                              .groupby('breath_id')['u_in']\
+                                                              .rolling(window=15,min_periods=1)\
+                                                              .agg({"15_in_sum":"sum",
+                                                                    "15_in_min":"min",
+                                                                    "15_in_max":"max",
+                                                                    "15_in_mean":"mean"})\
+                                                               .reset_index(level=0,drop=True))
+    test_df[["15_in_sum","15_in_min","15_in_max","15_in_mean"]] = (test_df\
+                                                              .groupby('breath_id')['u_in']\
+                                                              .rolling(window=15,min_periods=1)\
+                                                              .agg({"15_in_sum":"sum",
+                                                                    "15_in_min":"min",
+                                                                    "15_in_max":"max",
+                                                                    "15_in_mean":"mean"})\
+                                                               .reset_index(level=0,drop=True))
+
     train_df = pd.get_dummies(train_df)
     test_df = pd.get_dummies(test_df)
 
     y = train_df['pressure'].to_numpy().reshape(-1, input_size)
 
-    train_df.drop(['pressure', 'id', 'breath_id'], axis=1, inplace=True)
-    test_df.drop(['id', 'breath_id'], axis=1, inplace=True)
+    train_df.drop(['pressure', 'id', 'breath_id', 'count', 'breath_id_lag', 'breath_id_lag2', 'breath_id_lagsame', 'breath_id_lag2same'], axis=1, inplace=True)
+    test_df.drop(['id', 'breath_id', 'count','breath_id_lag', 'breath_id_lag2', 'breath_id_lagsame', 'breath_id_lag2same'], axis=1, inplace=True)
 
     num_feats = len(train_df.columns)
+
+    print(f"train: {train_df.shape} \ntest: {test_df.shape}")
 
     scaler = StandardScaler()
     scaler.fit(train_df)
@@ -66,13 +92,14 @@ def main():
         X_train, X_valid = train[train_idx], train[test_idx]
         y_train, y_valid = y[train_idx], y[test_idx]
 
-        scheduler = tf.keras.optimizers.schedules.ExponentialDecay(lr, decay_epochs*((len(train)*0.8)/batch_size), decay_late)
-        es = EarlyStopping(monitor='val_loss',mode='min', patience=35, verbose=1,restore_best_weights=True)
+        lr = ReduceLROnPlateau(monitor="val_loss", factor=0.75, patience=10, verbose=0)
+        #scheduler = tf.keras.optimizers.schedules.ExponentialDecay(lr, decay_epochs*((len(train)*0.8)/batch_size), decay_late)
+        es = EarlyStopping(monitor='val_loss',mode='min', patience=50, verbose=0,restore_best_weights=True)
         tb = callbacks.TensorBoard(log_dir=path/'logs'/f'fold{fold}', histogram_freq=1)
 
         model = create_model(input_size, num_feats)
 
-        history = model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=epochs, batch_size=batch_size, callbacks=[es, callbacks.LearningRateScheduler(scheduler), tb])
+        history = model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=epochs, batch_size=batch_size, callbacks=[es, lr, tb])
         test_preds.append(model.predict(test).squeeze().reshape(-1, 1).squeeze())
 
         results = model.evaluate(X_valid, y_valid, batch_size=batch_size)

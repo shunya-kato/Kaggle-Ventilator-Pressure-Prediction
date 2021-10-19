@@ -7,27 +7,13 @@ sys.path.append(os.path.abspath(".."))
 sys.path.append(os.path.abspath("."))
 from scripts.load_features import load_features
 import json
+import numpy as np
 
-class time_end(Feature):
+class u_out_lagback_diff1(Feature):
     def create_features(self):
-        # All entries are first point of each breath_id
-        first_df = train.loc[0::80,:]
-        # All entries are first point of each breath_id
-        last_df = train.loc[79::80,:]
-    
-        time_end_dict = dict(zip(last_df['breath_id'], last_df['time_step']))     
-        self.train['time_end'] = train['breath_id'].map(time_end_dict)
-
-        # All entries are first point of each breath_id
-        first_df = test.loc[0::80,:]
-        # All entries are first point of each breath_id
-        last_df = test.loc[79::80,:]
+        self.train['u_out_lagback_diff1'] = train['u_out'] - train['u_out_lag_back1']
+        self.test['u_out_lagback_diff1'] = test['u_out'] - test['u_out_lag_back1']
         
-        # The Main mode DataFrame and flag
-        time_end_dict = dict(zip(last_df['breath_id'], last_df['time_step']))     
-        self.test['time_end'] = test['breath_id'].map(time_end_dict)
-        
-
 if __name__ == '__main__':
     args = get_arguments()
 
