@@ -17,7 +17,7 @@ from tensorflow.keras.callbacks import *
 from models.dnn_model import create_model
 
 def main():
-    print("GPUs Available: ", tf.test.is_gpu_available())
+    # print("GPUs Available: ", tf.test.is_gpu_available())
     path = Path(__file__).parent
     with open(path / 'configs' / 'default.json') as f:
         config = json.load(f)
@@ -46,23 +46,6 @@ def main():
     test_df['R'] = test_df['R'].astype(str)
     test_df['C'] = test_df['C'].astype(str)
 
-    train_df[["15_in_sum","15_in_min","15_in_max","15_in_mean"]] = (train_df\
-                                                              .groupby('breath_id')['u_in']\
-                                                              .rolling(window=15,min_periods=1)\
-                                                              .agg({"15_in_sum":"sum",
-                                                                    "15_in_min":"min",
-                                                                    "15_in_max":"max",
-                                                                    "15_in_mean":"mean"})\
-                                                               .reset_index(level=0,drop=True))
-    test_df[["15_in_sum","15_in_min","15_in_max","15_in_mean"]] = (test_df\
-                                                              .groupby('breath_id')['u_in']\
-                                                              .rolling(window=15,min_periods=1)\
-                                                              .agg({"15_in_sum":"sum",
-                                                                    "15_in_min":"min",
-                                                                    "15_in_max":"max",
-                                                                    "15_in_mean":"mean"})\
-                                                               .reset_index(level=0,drop=True))
-
     train_df = pd.get_dummies(train_df)
     test_df = pd.get_dummies(test_df)
 
@@ -82,7 +65,6 @@ def main():
 
     train = train.reshape(-1, input_size, num_feats)
     test = test.reshape(-1, input_size, num_feats)
-
     Fold = KFold(n_splits=n_splits, shuffle=True, random_state=seed)
 
     test_preds = []
