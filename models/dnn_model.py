@@ -4,10 +4,8 @@ from tensorflow.keras import *
 from tensorflow.keras.callbacks import *
 
 def create_model(input_size, num_feats):
-    # if single gpu
-    # strategy = tf.distribute.get_strategy()
-    strategy = tf.distribute.MirroredStrategy()
-    
+    strategy = tf.distribute.get_strategy()
+
     with strategy.scope():
         x_input = Input(shape=(input_size, num_feats))
     

@@ -37,6 +37,7 @@ def main():
 
     train_df = pd.read_csv(path / 'data' / 'input' / 'train.csv')
     test_df = pd.read_csv(path / 'data' / 'input' / 'test.csv')
+    pred_df = pd.read_csv(path / 'data' /'from_kaggle' / 'submission_0.1409.csv')
 
     train_feats, test_feats = load_features(config['features'])
 
@@ -50,6 +51,10 @@ def main():
 
     train_df = pd.get_dummies(train_df)
     test_df = pd.get_dummies(test_df)
+
+    test_df['pressure'] = pred_df['pressure']
+
+    train_df = pd.concat([train_df, test_df])
 
     y = train_df['pressure'].to_numpy().reshape(-1, input_size)
 
@@ -67,7 +72,7 @@ def main():
     gc.collect()
 
     train_df.drop(['pressure', 'id', 'breath_id', 'count', 'breath_id_lag', 'breath_id_lag2', 'breath_id_lagsame', 'breath_id_lag2same'], axis=1, inplace=True)
-    test_df.drop(['id', 'breath_id', 'count','breath_id_lag', 'breath_id_lag2', 'breath_id_lagsame', 'breath_id_lag2same'], axis=1, inplace=True)
+    test_df.drop(['pressure', 'id', 'breath_id', 'count','breath_id_lag', 'breath_id_lag2', 'breath_id_lagsame', 'breath_id_lag2same'], axis=1, inplace=True)
 
     num_feats = len(train_df.columns)
 
