@@ -6,7 +6,8 @@
         "breath_id__u_in__diffmax", "breath_id__u_in__diffmean", "breath_id__u_out__diffmax", "breath_id__u_out__diffmean", "cross", "cross2", "r__c", "time_delta",
         "area_true", "u_in_mean", "u_in_std", "u_in_half", "u_in_half_max", "u_in_half_min", "u_in_half_mean", "u_in_half_std", "main_mode", "u_in_first", "u_in_last", "time_end",
         "time_step_cumsum", "breath_id__u_in__mean", "count", "u_in_cummean", "breath_id_lag", "breath_id_lag2", "breath_id_lagsame", "breath_id_lag2same",
-        "breath_id__u_in_lag", "breath_id__u_in_lag2", "time_step_diff", "ewm_u_in_mean", "u_in_lagback_diff1", "u_in_lagback_diff2", "u_out_lagback_diff1", "u_out_lagback_diff2"
+        "breath_id__u_in_lag", "breath_id__u_in_lag2", "time_step_diff", "ewm_u_in_mean", "u_in_lagback_diff1", "u_in_lagback_diff2", "u_out_lagback_diff1", "u_out_lagback_diff2",
+        "sum_in_15","min_in_15","max_in_15","mean_in_15"
     ],
     "features": [
         "cross", "cross2", "area", "time_step_cumsum", "u_in_cumsum", "u_in_lag1", "u_in_lag2", "u_in_lag3", "u_in_lag4", "u_out_lag1", "u_out_lag2", "u_out_lag3", "u_out_lag4",
@@ -14,7 +15,8 @@
         "breath_id__u_in__max", "breath_id__u_in__mean", "breath_id__u_in__diffmax", "breath_id__u_in__diffmean",
         "u_in_diff1", "u_in_diff2", "u_in_diff3", "u_in_diff4", "u_out_diff1", "u_out_diff2", "u_out_diff3", "u_out_diff4",
         "count", "u_in_cummean", "breath_id_lag", "breath_id_lag2", "breath_id_lagsame", "breath_id_lag2same", "breath_id__u_in_lag", "breath_id__u_in_lag2",
-        "time_step_diff", "ewm_u_in_mean", "u_in_lagback_diff1", "u_in_lagback_diff2", "u_out_lagback_diff1", "u_out_lagback_diff2", "r__c"
+        "time_step_diff", "ewm_u_in_mean", "u_in_lagback_diff1", "u_in_lagback_diff2", "u_out_lagback_diff1", "u_out_lagback_diff2", "r__c",
+        "sum_in_15","min_in_15","max_in_15","mean_in_15"
     ],
     "input_size": 80,
     "batch_size": 512,

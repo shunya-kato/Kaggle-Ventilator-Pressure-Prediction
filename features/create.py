@@ -9,11 +9,37 @@ from scripts.load_features import load_features
 import json
 import numpy as np
 
-class u_out_lagback_diff1(Feature):
+class sum_in_15(Feature):
     def create_features(self):
-        self.train['u_out_lagback_diff1'] = train['u_out'] - train['u_out_lag_back1']
-        self.test['u_out_lagback_diff1'] = test['u_out'] - test['u_out_lag_back1']
-        
+        self.train["sum_in_15"] = (train.groupby('breath_id')['u_in'].rolling(window=15,min_periods=1)\
+                                    .sum().reset_index(level=0,drop=True))
+        self.test["sum_in_15"] = (test.groupby('breath_id')['u_in'].rolling(window=15,min_periods=1)\
+                                    .sum().reset_index(level=0,drop=True))
+
+class min_in_15(Feature):
+    def create_features(self):
+        self.train["min_in_15"] = (train.groupby('breath_id')['u_in'].rolling(window=15,min_periods=1)\
+                                    .min().reset_index(level=0,drop=True))
+        self.test["min_in_15"] = (test.groupby('breath_id')['u_in'].rolling(window=15,min_periods=1)\
+                                    .min().reset_index(level=0,drop=True))
+
+class max_in_15(Feature):
+    def create_features(self):
+        self.train["max_in_15"] = (train.groupby('breath_id')['u_in'].rolling(window=15,min_periods=1)\
+                                    .max().reset_index(level=0,drop=True))
+        self.test["max_in_15"] = (test.groupby('breath_id')['u_in'].rolling(window=15,min_periods=1)\
+                                    .max().reset_index(level=0,drop=True))
+
+class mean_in_15(Feature):
+    def create_features(self):
+        self.train["mean_in_15"] = (train.groupby('breath_id')['u_in'].rolling(window=15,min_periods=1)\
+                                    .mean().reset_index(level=0,drop=True))
+        self.test["mean_in_15"] = (test.groupby('breath_id')['u_in'].rolling(window=15,min_periods=1)\
+                                    .mean().reset_index(level=0,drop=True))
+
+
+
+
 if __name__ == '__main__':
     args = get_arguments()
 
