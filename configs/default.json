@@ -22,7 +22,7 @@
     "batch_size": 512,
     "seed": 42,
     "epochs": 500,
-    "n_splits": 5,
+    "n_splits": 10,
     "lr": 1e-3,
     "decay_late": 1e-3,
     "decay_epochs": 200
